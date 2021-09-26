@@ -12,35 +12,10 @@ Host = '192.168.1.27'
 Port = 5002
 
 ## Criacao do socket TCP e inicio de escuta
-socket_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-socket_tcp.bind((Host, Port))
-socket_tcp.listen(5)
-
-print ('Bem vindo ao Chat 0.1!!')
-# Laco para receber conexoes
+udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+orig = (HOST, PORT)
+udp.bind(orig)
 while True:
-	conn, client_host = socket_tcp.accept()
-	print ('Cliente ', client_host, ' conectou.')
-	
-	# Laco para receber mensagens...
-	while True:
-		# Recebendo dados ate o tamanho do buffer.
-		# Dados maiores sao quebrados em varias mensagens(pacotes)
-		data = conn.recv(1024) 
-		result = data.decode()
-		if not data or result == "EXIT":
-			print ("Cliente Desconectou")
-			break
-		pass
-		# escrevendo mensagem
-		print ('=> ', result)
-		
-		# lendo resposta para enviar
-		# msg = input('=> ')
-		# enviando
-		conn.send(result.encode())
-	pass
-	
-pass
-
-conn.close()
+    msg, cliente = udp.recvfrom(1024)
+    print cliente, msg
+    udp.close()
