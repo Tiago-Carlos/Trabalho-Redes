@@ -5,7 +5,7 @@ import os
 import threading
 import time
 
-## Informações do servidor: Host e porta para conexao
+## Informacoes do servidor: Host e porta para conexao
 Host = '192.168.1.27'
 Port = 5002
 
@@ -16,7 +16,7 @@ socket_tcp.listen(5)
 
 #################################################################
 # Funcao para atender cada cliente que chega. A cada cliente,  ##
-# uma nova thread é criada para executar esta funcao.          ##
+# uma nova thread e criada para executar esta funcao.          ##
 #################################################################
 def atendeCliente(conexao, cliente):
     while True:
