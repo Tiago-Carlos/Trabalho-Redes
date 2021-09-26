@@ -1,53 +1,46 @@
 #!/usr/bin/python3
 
+#---------------------------------------------------------#
+# Implementacao de Chat utilizando conexoes TCP. Um lado  #
+# comporta-se como cliente e outro como servidor. Este eh #
+# o lado servidor.                                        #
+#---------------------------------------------------------#
 import socket
-import os
-import threading
-import time
 
-## Informacoes do servidor: Host e porta para conexao
+## Informações do servidor: Host e porta para conexao
 Host = '192.168.1.27'
 Port = 5002
 
-## Criacao do socket TCP para comunicacao
+## Criacao do socket TCP e inicio de escuta
 socket_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket_tcp.bind((Host, Port))
 socket_tcp.listen(5)
 
-#################################################################
-# Funcao para atender cada cliente que chega. A cada cliente,  ##
-# uma nova thread e criada para executar esta funcao.          ##
-#################################################################
-def atendeCliente(conexao, cliente):
-    while True:
-        #recebe a mensagem do cliente
-        message = conexao.recv(1024)# Tamanho do buffer eh 1024 bytes
-        result = message.decode()
-        
-        if result == "EXIT":
-            mensagem = str("Cliente " + cliente + " desconectou")
-            print(mensagem)
-            break
-        # recebe a mensagem e retorna para o cliente
-        elif result:
-            message = str(cliente) + ' ' + str(result)
-            print(message, '\n')
-            #devolver mensagem ao cliente
-            message = input("=> ")
-		    # enviando
-            conexao.send(message.encode())
-    return
-
-#########################
-## Programa principal ###
-#########################
-print ('Bem vindo ao Chat 0.3!!')
-
+print ('Bem vindo ao Chat 0.1!!')
+# Laco para receber conexoes
 while True:
-    #recebe novas conexoes
-    conn, client_host = socket_tcp.accept()
-    #thread para tratar cada cliente que entra
-    t1 = threading.Thread(target=atendeCliente, args=(conn, client_host,))
-    t1.start()
+	conn, client_host = socket_tcp.accept()
+	print ('Cliente ', client_host, ' conectou.')
+	
+	# Laco para receber mensagens...
+	while True:
+		# Recebendo dados ate o tamanho do buffer.
+		# Dados maiores sao quebrados em varias mensagens(pacotes)
+		data = conn.recv(1024) 
+		result = data.decode()
+		if not data or result == "EXIT":
+			print ("Cliente Desconectou")
+			break
+		pass
+		# escrevendo mensagem
+		print ('=> ', result)
+		
+		# lendo resposta para enviar
+		# msg = input('=> ')
+		# enviando
+		conn.send(result.encode())
+	pass
+	
+pass
 
-socket_tcp.close()
+conn.close()
