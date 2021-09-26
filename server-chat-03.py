@@ -7,7 +7,7 @@
 #---------------------------------------------------------#
 import socket
 
-## Informações do servidor: Host e porta para conexao
+## Informacoes do servidor: Host e porta para conexao
 Host = '192.168.1.27'
 Port = 5002
 
